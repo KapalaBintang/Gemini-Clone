@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 const RegisterPage = () => {
   const navigate = useNavigate();
 
@@ -10,8 +10,13 @@ const RegisterPage = () => {
     password: "",
   });
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
+    console.log(e.target);
+
     setFormData({
       ...formData,
       [name]: value,
@@ -20,6 +25,11 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (formData.name === "" || formData.email === "" || formData.password === "") {
+      setError("Please fill in all fields");
+      return;
+    }
 
     // Simpan data pengguna ke local storage
     localStorage.setItem("userData", JSON.stringify(formData));
@@ -74,6 +84,7 @@ const RegisterPage = () => {
               placeholder="Enter your password"
             />
           </div>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <div className="flex items-center justify-between">
             <button className="bg-indigo-700 hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
               Register
