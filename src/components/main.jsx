@@ -137,7 +137,7 @@ function Main() {
                   <p className="text-3xl  md:text-5xl font-bold">{`Hello ${userName}`}</p>
                   <p className="text-3xl  md:text-5xl font-bold">How can I help you today?</p>
                 </div>
-                <div className="mx-auto">
+                <div className="mx-auto mb-40">
                   <div className="cards w-full mx-auto justify-center items-center grid grid-rows-2 grid-cols-2 sm:grid-cols-3 md:flex lg:grid-cols-4 gap-x-9 gap-y-5 md:gap-x-3 ">
                     <div className="card mx-auto h-32 md:h-40 max-w-[8rem] md:max-w-[10rem] flex flex-col justify-between  bg-slate-700 rounded-md p-3">
                       <p className="text-sm md:text-base">Suggest beautiful places to see on a tour</p>
