@@ -12,16 +12,18 @@ import HistoryIcon from "@mui/icons-material/History";
 import HelpIcon from "@mui/icons-material/Help";
 import SettingsIcon from "@mui/icons-material/Settings";
 import InfoIcon from "@mui/icons-material/Info";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../context/ChatContext";
 import { Gemini } from "iconsax-react";
 import { Skeleton } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function Main() {
-  const { input, setInput, onSent, recentPrompt, resultData, loading, showResult, prevPrompts, setRecentPrompt, newChat } = useContext(Context);
+  const { input, setInput, onSent, recentPrompt, setPrevPrompts, resultData, loading, showResult, prevPrompts, setRecentPrompt, newChat } = useContext(Context);
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState("");
-  console.log(prevPrompts);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -43,9 +45,15 @@ function Main() {
     setOpen((previous) => !previous);
   };
 
+  const handleDelete = (index) => {
+    const updatedPrompts = prevPrompts.filter((_, i) => i !== index);
+    setPrevPrompts(updatedPrompts);
+  };
+
   return (
     <>
-      <div className="main container min-h-screen flex-1 pb-15 bg-black mx-auto relative">
+      <div className={`main container min-h-screen flex-1 pb-15 bg-black mx-auto relative ${open ? "pointer-events-none" : ""}`}>
+        {open && <div className="fixed inset-0 bg-black opacity-50 z-10"></div>}
         <div className="flex sm:hidden w-full justify-evenly px-5 py-5 relative nav">
           <div>
             <MenuIcon className="text-white" onClick={() => setOpen((previous) => !previous)} />
@@ -59,7 +67,7 @@ function Main() {
           <AccountCircleIcon className="text-white" />
         </div>
 
-        <div className={`transform ${open ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 fixed top-0 left-0  bg-slate-900 text-white min-h-screen z-10`}>
+        <div className={`transform ${open ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 fixed top-0 left-0  bg-slate-900 text-white min-h-screen z-20 pointer-events-auto`}>
           <div className="flex flex-col justify-between min-h-screen">
             <div className="flex flex-wrap flex-col gap-5">
               <div className="pl-7 pt-4 mb-3 pr-6">
@@ -77,36 +85,45 @@ function Main() {
 
               <div className="px-5 overflow-scroll no-scrollbar max-h-[250px]">
                 {prevPrompts.map((prompt, i) => (
-                  <div key={i} className="mb-2 hover:opacity-75 cursor-pointer rounded-xl" onClick={() => loadPrompt(prompt)}>
-                    <div className="flex gap-2">
-                      <ChatBubbleIcon />
-                      <p className="mt-1 text-xs mb-2 text-ellipsis ... ">{prompt.slice(0, 8)}...</p>
+                  <div key={i} className="mb-2  cursor-pointer rounded-xl">
+                    <div className="flex gap-2 ">
+                      <div className="flex items-center gap-2 hover:opacity-75 " onClick={() => loadPrompt(prompt)}>
+                        <ChatBubbleIcon />
+                        <p className="mt-1 text-xs mb-2 text-ellipsis ... ">{prompt.slice(0, 8)}...</p>
+                      </div>
+                      <DeleteIcon className="text-red-500 cursor-pointer" onClick={() => handleDelete(i)} />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="flex flex-wrap flex-col gap-6 px-3 pb-7 sm:mt-32">
-              <div className="flex flex-wrap items-center gap-2  cursor-pointer">
+            <div className="flex flex-wrap flex-col gap-4 px-3 pb-7 sm:mt-32">
+              <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
                 <HistoryIcon />
                 <p>History</p>
               </div>
-              <div className="flex flex-wrap items-center gap-2 cursor-pointer">
+              <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
                 <HelpIcon />
                 <a href="https://www.instagram.com/abdul_aziz_2412/" target="_blank">
                   Help
                 </a>
               </div>
-              <div className="flex flex-wrap items-center gap-2 cursor-pointer">
+              <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
                 <SettingsIcon />
                 <p>Settings</p>
               </div>
-              <div className="flex flex-wrap items-center gap-2 cursor-pointer">
+              <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
                 <InfoIcon />
                 <a href="https://kapalabintang.github.io/Tailwind-CSS-Portofolio/#portofolio" target="_blank">
                   About me
                 </a>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
+                <>
+                  <LogoutIcon />
+                  <Link to={"/login"}>Logout</Link>
+                </>
               </div>
             </div>
           </div>

@@ -6,17 +6,38 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import InfoIcon from "@mui/icons-material/Info";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useContext } from "react";
 import { Context } from "../context/ChatContext";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
-  const { prevPrompts, setRecentPrompt, onSent, loading, newChat } = useContext(Context);
+  const { prevPrompts, setRecentPrompt, onSent, loading, newChat, setPrevPrompts } = useContext(Context);
   const [open, setOpen] = useState(false);
+  const [contextMenu, setContextMenu] = useState(null);
 
   const loadPrompt = async (prompt) => {
     setRecentPrompt(prompt);
     await onSent(prompt);
+  };
+
+  const deletePrompt = (index) => {
+    const updatedPrompts = prevPrompts.filter((_, i) => i !== index);
+    setPrevPrompts(updatedPrompts);
+    setContextMenu(null); // Reset context menu
+  };
+
+  const handleContextMenu = (event, index) => {
+    event.preventDefault();
+    setContextMenu({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY - 4,
+      index: index,
+    });
+  };
+
+  const handleClose = () => {
+    setContextMenu(null);
   };
 
   return (
@@ -46,20 +67,40 @@ const Sidebar = () => {
         {open && <div className="pl-2 font-semibold">Recent</div>}
 
         {open && (
-          <div className="px-7 overflow-scroll no-scrollbar max-h-[280px]">
+          <div className="px-7 overflow-scroll no-scrollbar max-h-[210px]">
             {prevPrompts.map((prompt, i) => (
-              <div key={i} className="mb-2 hover:opacity-75 cursor-pointer rounded-xl" onClick={() => loadPrompt(prompt)}>
-                <div className="flex gap-2">
+              <div
+                key={i}
+                className="mb-2 hover:opacity-75 cursor-pointer hover:bg-slate-600 rounded-xl px-2 py-1 transition duration-100 flex justify-between items-center"
+                onClick={() => loadPrompt(prompt)}
+                onContextMenu={(event) => handleContextMenu(event, i)}
+              >
+                <div className="flex items-center justify-center gap-2">
                   <ChatBubbleIcon />
-                  <p className="mt-1 text-xs mb-2 text-ellipsis ... ">{prompt.slice(0, 14)}...</p>
+                  <p className="text-xs text-ellipsis ...">{prompt.slice(0, 14)}...</p>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {contextMenu && (
+          <ul
+            className="absolute bg-gray-800 text-white rounded-md shadow-lg"
+            style={{
+              top: contextMenu.mouseY,
+              left: contextMenu.mouseX,
+            }}
+            onMouseLeave={handleClose}
+          >
+            <div className=" z-[99] flex gap-2 px-4 py-2 rounded-md hover:bg-gray-600 font-semibold cursor-pointer" onClick={() => deletePrompt(contextMenu.index)}>
+              <DeleteIcon /> Delete
+            </div>
+          </ul>
+        )}
       </div>
       {!open && (
-        <div className="flex flex-wrap flex-col gap-6 px-7 pb-7">
+        <div className="flex flex-wrap flex-col gap-5 px-7 pb-7">
           <div className="flex flex-wrap items-center gap-2">
             <HistoryIcon />
           </div>
@@ -78,28 +119,28 @@ const Sidebar = () => {
         </div>
       )}
       {open && (
-        <div className="flex flex-wrap flex-col gap-6 px-7 pb-7">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap flex-col gap-5 px-7 pb-7 mt-2">
+          <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
             <HistoryIcon />
             <p>History</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
             <HelpIcon />
             <a href="https://www.instagram.com/abdul_aziz_2412/" target="_blank">
               Help
             </a>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
             <SettingsIcon />
             <p>Settings</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2 cursor-pointer">
+          <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
             <InfoIcon />
             <a href="https://kapalabintang.github.io/Tailwind-CSS-Portofolio/#portofolio" target="_blank">
               About me
             </a>
           </div>
-          <div className="flex flex-wrap items-center gap-2 cursor-pointer">
+          <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
             <>
               <LogoutIcon />
               <Link to={"/login"}>Logout</Link>
