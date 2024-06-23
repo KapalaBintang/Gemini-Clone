@@ -98,7 +98,7 @@ function Main() {
               </div>
             </div>
 
-            <div className="flex flex-wrap flex-col gap-4 px-3 pb-7 sm:mt-32">
+            <div className="flex flex-wrap flex-col gap-4 px-3 pb-7 mt-5 sm:mt-32">
               <div className="flex flex-wrap items-center gap-2 hover:opacity-75 cursor-pointer">
                 <HistoryIcon />
                 <p>History</p>
