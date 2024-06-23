@@ -83,7 +83,7 @@ function Main() {
 
               <div className="pl-2 font-semibold">Recent</div>
 
-              <div className="px-5 overflow-scroll no-scrollbar max-h-[250px]">
+              <div className="px-5 overflow-scroll no-scrollbar max-h-[225px]">
                 {prevPrompts.map((prompt, i) => (
                   <div key={i} className="mb-2  cursor-pointer rounded-xl">
                     <div className="flex gap-2 ">
