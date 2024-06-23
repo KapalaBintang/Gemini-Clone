@@ -160,7 +160,7 @@ function Main() {
               </div>
             </>
           ) : (
-            <div className="result  max-h-[500px] md:max-h-[450px] overflow-scroll no-scrollbar flex flex-col items-end gap-4">
+            <div className="result mb-40 md:mb-0  max-h-[500px] md:max-h-[450px] overflow-scroll no-scrollbar flex flex-col items-end gap-4">
               <AccountCircleIcon />
               <div className="result-title flex flex-col items-end gap-2 px-3 py-3 mb-5 bg-slate-700 rounded-2xl">
                 <p className="text-base font-semibold">{recentPrompt}</p>
@@ -171,9 +171,9 @@ function Main() {
                   <>
                     <Gemini size="30" color="#FF8A65" />
                     <div className="flex flex-col gap-2 mt-7">
-                      <Skeleton variant="rectangular" className="rounded-md" width={"350px "} height={20} sx={{ bgcolor: "gray" }} />
-                      <Skeleton variant="rectangular" className="rounded-md" width={"350px"} height={20} sx={{ bgcolor: "gray" }} />
-                      <Skeleton variant="rectangular" className="rounded-md" width={"350px"} height={20} sx={{ bgcolor: "gray" }} />
+                      <Skeleton variant="rectangular" className="rounded-md" width={"300px "} height={20} sx={{ bgcolor: "gray" }} />
+                      <Skeleton variant="rectangular" className="rounded-md" width={"300px"} height={20} sx={{ bgcolor: "gray" }} />
+                      <Skeleton variant="rectangular" className="rounded-md" width={"300px"} height={20} sx={{ bgcolor: "gray" }} />
                     </div>
                   </>
                 ) : (
